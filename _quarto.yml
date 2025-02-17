@@ -1,17 +1,19 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: "sam-minard-portfolio"
+  title: "Sam Minard's ePortfolio"
   navbar:
     left:
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: "Home"
+      - href: about.qmd
+        text: "About"
 
 format:
   html:
-    theme: cosmo
+    theme: sandstone
     css: styles.css
     toc: true
 
