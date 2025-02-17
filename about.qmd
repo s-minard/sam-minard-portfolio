@@ -2,8 +2,4 @@
 title: "About"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+Hello, my name is Sam Minard and I am a Social and Behavioral Sciences major and Statistics minor at California State University, Monterey Bay.
