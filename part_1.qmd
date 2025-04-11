@@ -1,0 +1,90 @@
+---
+title: "Portfolio Part 1: Development and Planning"
+format: html
+---
+
+### **Data Description**
+
+1.  **Identify your data source.**
+
+I will be using data from the Shark Incident Database - California.
+
+<https://catalog.data.gov/dataset/shark-incident-database-california-56167>
+
+1.  **Describe your data, including variables and data types.**
+
+The data set contains "information on the date, time, location, water depth, human activity, injury (if any), species of shark, and source information" for all recorded shark incidents in California from 1950-2022.
+
+The variables are incident number, date, time, county, location, mode (swimming/free diving/etc.), injury, depth, species, comment, longitude, latitude, confirmed source, and WFL case number.
+
+1.  **Identify the research questions you want to answer.**
+
+My questions include:
+
+-   In which counties or locations has the highest number of incidents occurred?
+
+-   How many incidents involved fatal injuries? Major? Minor? None?
+
+-   How has the number of annual incidents fluctuated over time? Has it increased or decreased, or stayed consistent? How has this varied depending on county/location?
+
+-   Were shark incidents more common at certain points in the year, or times of day?
+
+-   Were incidents more common at the surface, or lower depths? Did some species have incidents more frequently at the surface compared to lower depths?
+
+-   Which "mode", shark species, and depth were most strongly associated with major or fatal injuries?
+
+### **Data Visualization**
+
+1.  **What do you want your final visualizations to look like?**
+
+I will probably have bar charts, line graphs, and correlograms. Bar charts will summarize counts for various categories, line graphs will show trends over time, and correlograms will show correlation between mode, species, depth, and injury severity.
+
+I would also love to make a map with pin points at the location of each incident if possible, since the data includes coordinates. I could also have a choropleth for the number of incidents in each county.
+
+2.  **What do you want to highlight on your final visualizations in order to answer your research questions? How do you plan to do that?**
+
+I plan to highlight changes over time, differences between categories (species, counties, etc.), and how correlated certain things are.
+
+3.  **What is missing from your data or would need to change in your data to create these visualizations?**
+
+The data is messy. Some columns contain both characters and numeric values. The time column contains decimals for some reason. I may have to change the date formats. Some columns have asterisks or punctuation that needs to be removed. The bottom rows are comments or summaries of the data, not individual observations, so they need to be removed.
+
+### **Data Cleaning**
+
+The answer to at least three of these questions should be “YES” for the data to meet the necessary standards to demonstrate your cleaning. Your data source should not be an already perfectly prepared data set.
+
+1.  **Do you need to reformat any variables into different types (e.g. factors, time, dates, strings)? Or remove information from variable values?**
+
+    -   YES
+
+2.  **Do you need to deal with any missing data, especially missing data coded other than NA?**
+
+    -   YES
+
+3.  **Do you need to filter your data? How?**
+
+    -   YES - I need to filter out observations where the species was killer whale since they are not sharks, they are technically dolphins.
+
+4.  **Do you need to create any new variables? What variables? How?**
+
+    -   UNSURE
+
+5.  **Do you need to add new data (join) to your data? What data? How?**
+
+    -   YES - I will need to add map data to create map visualizations.
+
+6.  **Are there any variables you can exclude from your data?**
+
+    -   YES - Incident number, comment, confirmed source, WLF case number.
+
+7.  **Do you need pivot your data in any way? Why? How?**
+
+    -   UNSURE
+
+8.  **Do you need to summarize any of the variables? Which ones? How?**
+
+    -   UNSURE
+
+9.  **What other aspects of your data need to be “fixed” in order to make your data visualizations?**
+
+    -   YES - Time format needs to be fixed.
