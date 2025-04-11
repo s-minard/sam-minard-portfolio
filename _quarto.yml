@@ -10,7 +10,11 @@ website:
         text: "Home"
       - href: about.qmd
         text: "About"
+<<<<<<< HEAD
       - href: part_1.qmd
+=======
+        href: part_1.qmd
+>>>>>>> 46324232b3f036622f9f33ce7e51af6b204670b8
         text: "Project Part 1: Development and Planning"
 
 format:
