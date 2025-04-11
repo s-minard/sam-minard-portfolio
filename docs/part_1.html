@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Portfolio Part 1: Development and Planning – Sam Minard’s ePortfolio</title>
+<title>Portfolio Project Part 1: Development and Planning – Sam Minard’s ePortfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -96,6 +96,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./part_1.html" aria-current="page"> 
+<span class="menu-text">Project Part 1: Development and Planning</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -107,15 +111,23 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#data-description" id="toc-data-description" class="nav-link active" data-scroll-target="#data-description"><strong>Data Description</strong></a></li>
+  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization"><strong>Data Visualization</strong></a></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><strong>Data Cleaning</strong></a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Portfolio Part 1: Development and Planning</h1>
+<h1 class="title">Portfolio Project Part 1: Development and Planning</h1>
 </div>
 
 
@@ -132,9 +144,91 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>test</p>
+<section id="data-description" class="level3">
+<h3 class="anchored" data-anchor-id="data-description"><strong>Data Description</strong></h3>
+<ol type="1">
+<li><strong>Identify your data source.</strong></li>
+</ol>
+<p>I will be using data from the Shark Incident Database - California.</p>
+<p><a href="https://catalog.data.gov/dataset/shark-incident-database-california-56167" class="uri">https://catalog.data.gov/dataset/shark-incident-database-california-56167</a></p>
+<ol type="1">
+<li><strong>Describe your data, including variables and data types.</strong></li>
+</ol>
+<p>The data set contains “information on the date, time, location, water depth, human activity, injury (if any), species of shark, and source information” for all recorded shark incidents in California from 1950-2022.</p>
+<p>The variables are incident number, date, time, county, location, mode (swimming/free diving/etc.), injury, depth, species, comment, longitude, latitude, confirmed source, and WFL case number.</p>
+<ol type="1">
+<li><strong>Identify the research questions you want to answer.</strong></li>
+</ol>
+<p>My questions include:</p>
+<ul>
+<li><p>In which counties or locations has the highest number of incidents occurred?</p></li>
+<li><p>How many incidents involved fatal injuries? Major? Minor? None?</p></li>
+<li><p>How has the number of annual incidents fluctuated over time? Has it increased or decreased, or stayed consistent? How has this varied depending on county/location?</p></li>
+<li><p>Were shark incidents more common at certain points in the year, or times of day?</p></li>
+<li><p>Were incidents more common at the surface, or lower depths? Did some species have incidents more frequently at the surface compared to lower depths?</p></li>
+<li><p>Which “mode”, shark species, and depth were most strongly associated with major or fatal injuries?</p></li>
+</ul>
+</section>
+<section id="data-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="data-visualization"><strong>Data Visualization</strong></h3>
+<ol type="1">
+<li><strong>What do you want your final visualizations to look like?</strong></li>
+</ol>
+<p>I will probably have bar charts, line graphs, and correlograms. Bar charts will summarize counts for various categories, line graphs will show trends over time, and correlograms will show correlation between mode, species, depth, and injury severity.</p>
+<p>I would also love to make a map with pin points at the location of each incident if possible, since the data includes coordinates. I could also have a choropleth for the number of incidents in each county.</p>
+<ol start="2" type="1">
+<li><strong>What do you want to highlight on your final visualizations in order to answer your research questions? How do you plan to do that?</strong></li>
+</ol>
+<p>I plan to highlight changes over time, differences between categories (species, counties, etc.), and how correlated certain things are.</p>
+<ol start="3" type="1">
+<li><strong>What is missing from your data or would need to change in your data to create these visualizations?</strong></li>
+</ol>
+<p>The data is messy. Some columns contain both characters and numeric values. The time column contains decimals for some reason. I may have to change the date formats. Some columns have asterisks or punctuation that needs to be removed. The bottom rows are comments or summaries of the data, not individual observations, so they need to be removed.</p>
+</section>
+<section id="data-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning"><strong>Data Cleaning</strong></h3>
+<p>The answer to at least three of these questions should be “YES” for the data to meet the necessary standards to demonstrate your cleaning. Your data source should not be an already perfectly prepared data set.</p>
+<ol type="1">
+<li><p><strong>Do you need to reformat any variables into different types (e.g.&nbsp;factors, time, dates, strings)? Or remove information from variable values?</strong></p>
+<ul>
+<li>YES</li>
+</ul></li>
+<li><p><strong>Do you need to deal with any missing data, especially missing data coded other than NA?</strong></p>
+<ul>
+<li>YES</li>
+</ul></li>
+<li><p><strong>Do you need to filter your data? How?</strong></p>
+<ul>
+<li>YES - I need to filter out observations where the species was killer whale since they are not sharks, they are technically dolphins.</li>
+</ul></li>
+<li><p><strong>Do you need to create any new variables? What variables? How?</strong></p>
+<ul>
+<li>UNSURE</li>
+</ul></li>
+<li><p><strong>Do you need to add new data (join) to your data? What data? How?</strong></p>
+<ul>
+<li>YES - I will need to add map data to create map visualizations.</li>
+</ul></li>
+<li><p><strong>Are there any variables you can exclude from your data?</strong></p>
+<ul>
+<li>YES - Incident number, comment, confirmed source, WLF case number.</li>
+</ul></li>
+<li><p><strong>Do you need pivot your data in any way? Why? How?</strong></p>
+<ul>
+<li>UNSURE</li>
+</ul></li>
+<li><p><strong>Do you need to summarize any of the variables? Which ones? How?</strong></p>
+<ul>
+<li>UNSURE</li>
+</ul></li>
+<li><p><strong>What other aspects of your data need to be “fixed” in order to make your data visualizations?</strong></p>
+<ul>
+<li>YES - Time format needs to be fixed.</li>
+</ul></li>
+</ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

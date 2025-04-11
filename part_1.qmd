@@ -1,5 +1,5 @@
 ---
-title: "Portfolio Part 1: Development and Planning"
+title: "Portfolio Project Part 1: Development and Planning"
 format: html
 ---
 
