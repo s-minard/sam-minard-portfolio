@@ -10,7 +10,7 @@ website:
         text: "Home"
       - href: about.qmd
         text: "About"
-      - href: project.qmd
+      - href: portfolio-project/project.qmd
         text: "STAT 210 Project: Shark Data"
 
 format:
