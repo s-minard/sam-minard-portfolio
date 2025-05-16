@@ -1,0 +1,146 @@
+---
+title: "STAT 210 Project: CA Shark Incidents (1950-2022)"
+format: html
+execute: 
+  warning: false
+---
+
+# Data Description
+**The Shark Incident Database - California** contains "information on the date, time, location, water depth, human activity, injury (if any), species of shark, and source information" for all recorded shark incidents in California from 1950-2022. The data is publicly  available at data.gov.
+
+https://catalog.data.gov/dataset/shark-incident-database-california-56167 
+
+# Data Cleaning
+
+To clean the data, I removed variables that were not useful for the visualizations I wanted to make. I then ensured all the values for each of the variables were in the correct format by removing random special characters like asterisks. I also made sure that missing data was correctly identified as NA. To create the visualizations, I made a new variable to count the number of incidents recorded each year. 
+
+```{r}
+#| label: setup
+#| include: false
+# load necessary packages
+
+library(tidyverse)
+library(ggplot2)
+library(maps)
+```
+
+```{r}
+#| label: load-data
+#| include: false
+sharks <- readxl::read_xlsx("data/data-raw/SharkIncidents_1950_2022.xlsx", na = c("N/A", "Unknown"))
+```
+
+```{r}
+#| label: data-cleaning
+#| include: false
+
+# change names to snake case
+sharks <- janitor::clean_names(sharks)
+
+# remove asterisks from all columns and remove some irrelevant columns and rows
+sharks <- sharks |> 
+  select(-wfl_case_number, -confirmed_source, -incident_num, -comment, -location, -time) |>
+  mutate(across(where(is.character), ~str_replace_all(., "\\*", ""))) |> 
+  slice(-c(212:220)) 
+
+# make a "year" column by extracting the first 4 numbers from the date values, make sure its treated as integer
+# add an incidents per year column
+sharks <- sharks |> 
+  mutate(year = str_extract(date, "^\\d{4}"),
+         year = as.integer(year)) |> 
+  add_count(year, name = "yearly_incidents")
+
+#fix the column type for latitude and longitude 
+sharks <- sharks |>
+  mutate(longitude = as.numeric(longitude),
+         latitude = as.numeric(latitude))
+```
+
+```{r}
+#| label: create-clean-data
+#| include: false
+#create a clean data file
+write_csv(sharks, "data/data-clean/sharks_clean.csv")
+sharks_clean <- read_csv("data/data-clean/sharks_clean.csv")
+```
+
+
+# Visualization 1
+
+The figure below displays the trends in the annual number of shark incidents from 1950 to 2022. Each point represents a single incident, while the lines represent trends. Colors correspond to the severity of the injury that resulted from the incident. The number of yearly incidents overall has been increasing over time, with the sharpest increase seen in the fatal injuries category. 
+
+```{r}
+#| label: visualization-1
+#| echo: false
+
+# plot for yearly incidents over time
+ggplot(sharks_clean) +
+  geom_point(aes(x = year,
+                 y = as.factor(yearly_incidents), 
+                 color = injury)) +
+  geom_smooth(aes(x = year,
+                  y = yearly_incidents,
+                  color = injury),
+              se = FALSE) +
+  theme_light() +
+  scale_color_viridis_d() +
+  labs(title = "Yearly Shark Incidents Have Increased in CA from 1950-2022",
+       x = "Year",
+       y = "Number of Incidents Per Year",
+       color = "Injury Severity",
+       alt = "The figure shows the number of shark incidents per year from 1950-2022 as individual points. Points are colored according to the severity of the injuries incurred. Smoothed lines display the trends over time, showing an increase in incididents across all injury severity levels, but an especially sharp increase in fatal incidents since the 1990's.",
+       caption = "The figure shows the number of shark incidents per year from 1950-2022 as individual points, colored \naccording to the severity of the injuries incurred. Smoothed lines for each severity level show trends.")
+
+```
+
+# Visualization 2
+
+This figure displays the locations of shark-related incidents that occurred along the California coast from 1950 to 2022. Each point represents a single incident, and there are four panels corresponding to the different injury levels. This allows us to compare where different types of encounters happened. Most major injuries occurred just north of San Francisco, by the Farallon Islands, a known hot spot for great white sharks. However, we can see that fatal incidents are the least common. 
+
+```{r}
+#| label: visualization-2
+#| echo: false 
+
+# shark incident map by injury severity
+
+# create a basic CA map
+ca_map <- map_data("state") |> 
+  filter(region == "california")
+
+# first create map data without NAs and recode injury categories to be more descriptive
+sharks_map <- sharks_clean |>
+  filter(!is.na(longitude), !is.na(latitude), longitude != 0, latitude != 0) |> 
+  mutate(injury = fct_recode(injury,
+                              "Fatal Injuries" = "fatal",
+                              "Major Injuries" = "major",
+                              "Minor Injuries" = "minor",
+                              "No Injuries" = "none"))
+
+# create the plot
+ggplot() +
+  geom_polygon(data = ca_map, 
+               aes(x = long, 
+                   y = lat, 
+                   group = group),
+               fill = "white", 
+               color = "black") +
+  geom_point(data = sharks_map, 
+             aes(x = longitude, 
+                 y = latitude, 
+                 color = injury),
+             alpha = 0.5, size = 1.5) +
+  coord_fixed(1.3) + #coord_fixed changes the lat/long ratio to avoid distortion
+  labs(title = "Shark Incidents in California (1950–2022)",
+       x = "Longitude",
+       y = "Latitude",
+       caption = "Points represent coordinates (latitude and longitude) of shark incidents in CA from 1950-2022.\n Incidents are displayed on four different panels according to the severity of the injuries.",
+       alt = "The plot shows four outlines of the map of California with colored points along the coastline. Each map represents shark incidents within each of the following injury severity categories: fatal injuries, major injuries, minor injuries, and no injuries. The points on the 'no injuries' plot are densely overlapped and evenly distributed across the whole state's coastline. The 'minor injuries' panel shows fewer points, but still a large amount covering most of the coastline. The 'major injuries' panel also has points along the entire length of the coastline, but there are fewer points in Southern California, and a noticeable clump above San Francisco. The 'fatal injuries' panel has far fewer points that are mostly distributed between San Francisco to San Diego. All panels show a small gap below the Monterey Peninsula.") +
+  theme_void() +
+  theme(legend.position = "none",
+        plot.caption = element_text(vjust = -1),
+        strip.text = element_text(face = "bold", size = 11),
+        plot.title = element_text(face = "bold"))+
+  facet_wrap(~injury, ncol = 4, 
+             strip.position = "bottom")
+```
+
